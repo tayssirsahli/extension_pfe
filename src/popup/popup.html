@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extension Web Scraper</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/src/popup/popup.css">
+
+
+</head>
+
+<body>
+  <div class="sidebar">
+    <button id="save-btn" class="action-button"><i class="fas fa-save"></i><span>Enregistrer (JSON)</span></button>
+    <button id="save-csv-btn" class="action-button"><i class="fas fa-file-csv"></i><span>Enregistrer
+        (CSV)</span></button>
+    <button id="save-db-btn" class="action-button"><i class="fas fa-database"></i><span>Enregistrer (DB)</span></button>
+    <button id="deselect-btn" class="action-button"><i class="fas fa-times"></i><span>Désélectionner</span></button>
+    <button class="action-button">
+      <a href="http://localhost:3000/admin/default" target="_blank" class="action-button">
+        <i class="fa fa-share" aria-hidden="true"></i><span>aller au site</span>
+      </a>
+    </button>
+  </div>
+
+  <div class="main-content">
+    <h2>Extension Web Scraper</h2>
+    <button id="select-post-btn"><i class="fas fa-search"></i>Sélectionner un post</button>
+
+
+    <!-- Zone pour afficher les données -->
+    <div id="result">
+      <table id="data-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Texte Extrait</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="no-data">Aucune donnée à afficher. Sélectionnez du texte pour le scraper.</div>
+    </div>
+    <table id="data-table-post" style="display: none;">
+      <thead>
+        <tr>
+          <th>Auteur</th>
+          <th>Texte</th>
+          <th>Image</th>
+          <th>Commentaires</th>
+          <th>Hashtags</th>
+          <th>title</th>
+          <th>platform</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+
+
+  <script src="popup.js" type="module"></script>
+</body>
+
+</html>

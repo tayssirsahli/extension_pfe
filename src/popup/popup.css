@@ -1,0 +1,186 @@
+
+/* Style global */
+body {
+  display: flex;
+  min-width: 100vw; /* Utilise toute la largeur de l'écran */
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Titre principal */
+h2 {
+  color: #2c3e50;
+  font-size: 28px;
+  margin: 15px 0;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 50px; /* Réduit la largeur de la sidebar */
+  background-color: #3498db;
+  color: #fff;
+  padding-top: 15px; /* Réduit l'espace en haut */
+  position: fixed;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .action-button {
+  margin-bottom: 15px; /* Augmente l'espace entre les boutons */
+  width: 40px; /* Réduit la largeur des boutons */
+  height: 40px; /* Réduit la hauteur des boutons */
+  font-size: 14px; /* Réduit la taille de l'icône */
+}
+
+/* Ajout d'un espace plus grand après le dernier bouton */
+.sidebar .action-button:last-child {
+  margin-bottom: 30px; /* Augmente l'espace sous le dernier bouton */
+}
+
+/* Contenu principal */
+.main-content {
+  margin-left: 60px; /* Réduit l'espace laissé par la sidebar */
+  width: calc(100% - 60px); /* Utilise toute la largeur restante */
+  padding: 20px;
+  overflow-y: auto;
+  margin-top: 30px;
+}
+
+/* Boutons principaux */
+button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px; /* Réduit la taille du bouton */
+  font-size: 14px; /* Réduit la taille du texte */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Zone de résultat */
+#result {
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ffffff;
+  color: #34495e;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Tableau des données */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f9f9f9;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Message "Aucune donnée" */
+#no-data {
+  text-align: center;
+  color: #95a5a6;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+/* Style des boutons d'enregistrement alignés horizontalement */
+.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 40px; /* Réduit la largeur des boutons */
+  height: 40px; /* Réduit la hauteur des boutons */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.action-button:hover {
+  background-color: #2980b9;
+}
+
+.action-button i {
+  font-size: 18px; /* Réduit la taille de l'icône */
+}
+
+.action-button span {
+  display: none;
+  position: absolute;
+  bottom: -35px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.action-button:hover span {
+  display: block;
+}
+
+/* Responsive */
+@media screen and (max-width: 700px) {
+  body {
+    width: 100%;
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .sidebar {
+    width: 50px; /* Réduit la largeur de la sidebar en mobile */
+  }
+
+  .main-content {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+  }
+}
+

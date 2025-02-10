@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Scraper</title>
+  <link rel="stylesheet" href="/src/popup/popup.css">
+
+</head>
+<body>
+  <h2>Web Scraper</h2>
+  <button id="scrape-btn">Scraper les données</button>
+  <button id="select-post-btn">Sélectionner un post</button>
+  
+  <!-- Zone pour afficher les données dans un tableau -->
+  <div id="result">
+    <table id="data-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>Texte Extrait</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="no-data" style="display: block;">Aucune donnée à afficher. Sélectionnez du texte pour le scraper.</div>
+  </div>
+
+  <table id="data-table-post" style="display: none;">
+    <thead>
+      <tr>
+        <th>Auteur</th>
+        <th>Texte</th>
+        <th>Image</th>
+        <th>Commentaires</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Bouton pour enregistrer les données en JSON -->
+  <button id="save-btn" style="display: none;">Enregistrer les données (JSON)</button>
+  
+  <!-- Bouton pour enregistrer les données en CSV -->
+  <button id="save-csv-btn" style="display: none;">Enregistrer les données (CSV)</button>
+  <button id="save-db-btn" >Enregistrer dans la base de données</button>
+  <button id="deselect-btn" style="display: none;">Désélectionner le texte</button>
+
+  <script src="/src/popup/popup.js" type="module"></script>
+</body>
+</html>

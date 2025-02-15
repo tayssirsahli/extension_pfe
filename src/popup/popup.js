@@ -24,7 +24,10 @@ function extractTableData() {
 
         });
     });
+
     return rows;
+
+
 }
 
 document.getElementById("save-btn").addEventListener("click", () => {

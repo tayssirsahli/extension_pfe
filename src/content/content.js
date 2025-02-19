@@ -1,13 +1,12 @@
 
-
 // Configuration des sélecteurs pour chaque plateforme
-const platformConfigs = {
+platformConfigs = {
   linkedin: {
     postSelector: 'div.fie-impression-container', // Sélecteur pour un post LinkedIn
     authorSelector: 'span.visually-hidden',
     textSelector: 'div.feed-shared-update-v2__description',
     imageSelector: 'img.update-components-image__image',
-    commentsSelector: 'div.comments-comments-list',
+    commentsSelector: 'article.comments-comment-item',
   },
   x: {
     postSelector: 'div.css-175oi2r.r-eqz5dr.r-16y2uox.r-1wbh5a2', // Sélecteur pour un tweet
@@ -46,9 +45,9 @@ function captureVisibleImages() {
     .filter(img => {
       const rect = img.getBoundingClientRect();
       return rect.width > 50 && rect.height > 50 &&
-             rect.top >= 0 && rect.left >= 0 &&
-             rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-             rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+        rect.top >= 0 && rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth);
     })
     .map(img => img.src);
 }
@@ -85,8 +84,22 @@ function handlePostClick(event, config) {
     const author = post.querySelector(config.authorSelector)?.textContent.trim() || "Auteur inconnu";
     let text = post.querySelector(config.textSelector)?.textContent.trim() || "Texte non disponible";
     const image = post.querySelector(config.imageSelector)?.src || "Image non disponible";
-    const comments = Array.from(post.querySelectorAll(config.commentsSelector)).map(comment => comment.textContent.trim()) || null;
+    //const comments = Array.from(post.querySelectorAll(config.commentsSelector)).map(comment => comment.textContent.trim()) || null;
 
+    let comments = [];
+    if (detectPlatform() === "facebook") {
+      comments = Array.from(post.querySelectorAll(config.commentsSelector)).map(comment => comment.textContent.trim()) || null;
+    } else if (detectPlatform() === "linkedin") {
+      const commentaireNodes  = document.querySelectorAll(config.commentsSelector);
+      console.log("Commentaire extrait :", commentaireNodes);
+
+      commentaireNodes.forEach(comment => {
+        const commentText= comment.querySelector('.comments-comment-item__main-content')?.textContent.trim();
+        comments.push(commentText);
+      });
+
+      console.log("extractedComments", comments);
+    }
     const hashtags = extractHashtags(text);
     text = removeHashtagsFromText(text);
     const title = generatePostTitle(text);
@@ -96,19 +109,22 @@ function handlePostClick(event, config) {
       data: { platform: detectPlatform(), author, text, image, comments, hashtags, title }
     });
 
-        
+    console.log(Array.isArray(hashtags)); // Doit retourner true
+
+
+    console.log("hashtags sélectionné :", hashtags.join(","));
     selectedPost = {
       platform: detectPlatform(),
       author,
       text,
       image,
       comments,
-      hashtags,
+      hashtags: hashtags.join(","),
       title
     };
 
     rows.push(selectedPost);
-    
+
 
     console.log("Post sélectionné :", { platform: detectPlatform(), author, text, image, comments, hashtags, title });
   } else {
@@ -233,7 +249,7 @@ function createScraperButton(post, platform) {
   scraperBtn.className = "my-extension-btn";
   scraperBtn.style.cssText = `
     position: absolute;
-    top: 10px;
+    top: 40px;
     right: 10px;
     background-color: #3498db;
     color: white;
@@ -245,30 +261,101 @@ function createScraperButton(post, platform) {
     font-weight: bold;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s ease-in-out;
-    opacity: 0; /* Caché par défaut */
-    pointer-events: none; /* Désactiver l'interaction quand caché */
+    opacity: 0;
+    pointer-events: none;
   `;
 
-  // Effet au survol
+  let selectBtn = document.createElement("button");
+  selectBtn.innerText = "✔️ Sélectionner";
+  selectBtn.className = "action-btn";
+  selectBtn.style.cssText = `
+    position: absolute;
+    top: 90px;
+    right: 10px;
+    background-color:rgb(245, 245, 245);
+    color: black;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+  `;
+
+  let saveBtn = document.createElement("button");
+  saveBtn.innerText = "💾 Sauvegarder";
+  saveBtn.className = "action-btn";
+  saveBtn.style.cssText = `
+    position: absolute;
+    top: 130px;
+    right: 10px;
+    background-color:rgb(245, 245, 245);
+    color: black;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+  `;
+
+  let buttonsVisible = false; // Indique si les boutons sont affichés
+
+  // Afficher le bouton "Scraper" au survol du post
   post.addEventListener("mouseenter", () => {
     scraperBtn.style.opacity = "1";
     scraperBtn.style.pointerEvents = "auto";
   });
 
+  // Cacher le bouton "Scraper" quand la souris quitte le post
   post.addEventListener("mouseleave", () => {
     scraperBtn.style.opacity = "0";
     scraperBtn.style.pointerEvents = "none";
+    hideActionButtons(); // Cacher aussi les autres boutons
   });
 
-  // Action au clic
+  // Clic sur "Scraper" -> Affichage des boutons "Sélectionner" et "Sauvegarder"
   scraperBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    showActionButtons(post, platform);
+    buttonsVisible = true;
+
+    selectBtn.style.opacity = "1";
+    selectBtn.style.pointerEvents = "auto";
+
+    saveBtn.style.opacity = "1";
+    saveBtn.style.pointerEvents = "auto";
+  });
+
+  // Fonction pour cacher les boutons "Sélectionner" et "Sauvegarder"
+  function hideActionButtons() {
+    buttonsVisible = false;
+    selectBtn.style.opacity = "0";
+    selectBtn.style.pointerEvents = "none";
+    saveBtn.style.opacity = "0";
+    saveBtn.style.pointerEvents = "none";
+  }
+
+  // Action des boutons
+  selectBtn.addEventListener("click", () => {
+    enablePostSelection();
+  });
+
+  saveBtn.addEventListener("click", () => {
+    saveSelectedPosts();
   });
 
   post.style.position = "relative";
   post.appendChild(scraperBtn);
+  post.appendChild(selectBtn);
+  post.appendChild(saveBtn);
 }
+
 
 
 
@@ -322,7 +409,7 @@ function showActionButtons(post, platform) {
   });
 
 
-  
+
   // Ajouter les boutons au post
   post.appendChild(selectBtn);
   post.appendChild(saveBtn);
